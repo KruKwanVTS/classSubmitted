@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: #667db6;
+            /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 1.2rem;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .container {
+            max-width: 600px;
+            /* background-color: #; */
+        }
+
+        label {
+            color: #fff;
+        }
+
+        .scan {
+            width: 100%;
+            height: 100%;
+        }
+
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: rgb(255, 0, 0);
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 2rem;
+            /* box-shadow: 2px 2px 3px #999; */
+        }
+
+        .my-float {
+            margin-top: 30px;
+        }
+
+        .float2 {
+            position: fixed;
+            /* width: 60px;
+            height: 60px; */
+            bottom: 30px;
+            left: 30px;
+            /* background-color: rgb(0, 255, 0); */
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            /* box-shadow: 2px 2px 3px #999; */
+        }
+
+        .my-float2 {
+            margin-top: 30px;
+        }
+
+        #video-container.example-style-2 {
+            position: relative;
+            width: max-content;
+            height: max-content;
+            overflow: hidden;
+            /* stroke: #64a2f3 !important; */
+        }
+
+        #video-container.example-style-2 .scan-region-highlight {
+            border-radius: 10px;
+            outline: rgba(0, 0, 0, .7) solid 50vmax;
+        }
+
+
+        /* #video-container.example-style-2 .scan-region-highlight-svg {
+            display: none;
+        } */
+        #video-container.example-style-2 .code-outline-highlight {
+            stroke: rgb(255, 255, 0) !important;
+            stroke-width: 5 !important;
+            stroke-dasharray: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid toggle">
+        <section class="container p-3 glass">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="display-4 text-light fw-bold">บันทึกชั่วโมงการสอน</div>
+                </div>
+            </div>
+            <div class="row g-3 justify-content-center mt-2">
+                <div class="col-12 text-center">
+                    <label for="teacher_name">ครูผู้สอน</label>
+                    <select class="form-select text-center" name="teacher_name" id="teacher_name">
+                        <option value="" disabled selected>เลือกชื่อครู</option>
+                    </select>
+                </div>
+                <div class="col-12 text-center">
+                    <label for="subject">วิชาที่สอน</label>
+                    <select class="form-select text-center" name="subject" id="subject">
+                        <option value="" disabled selected>เลือกวิชาที่สอน</option>
+                    </select>
+                </div>
+                <div class="col-6 text-center">
+                    <label for="teach_date">วันที่สอน</label>
+                    <input type="date" class="form-control text-center" id="teach_date" name="teach_date">
+                </div>
+                <div class="col-6 text-center">
+                    <label for="teach_time">เวลาสอน</label>
+                    <input type="time" class="form-control text-center" id="teach_time" name="teach_time">
+                </div>
+                <div class="col-6 text-center">
+                    <label for="teach_duration">จำนวนชั่วโมง</label>
+                    <input type="number" class="form-control text-center" id="teach_duration" name="teach_duration">
+                </div>
+                <div class="col-12 text-center">
+                    <button class="btn btn-warning btn-lg" id="start-scan"><i class="bi bi-qr-code-scan"></i>&nbsp;SCAN</button>
+                </div>
+                <div class="col-12 text-center border rounded bg-light p-2" style="display: none;">
+                    รายชื่อนักเรียน <span id="std_count"></span>
+                    <div id="scandiv" class="row g-2 p-2">
+                        <!-- <div class="col-12 btn btn-primary">test&nbsp;&nbsp;&nbsp;&nbsp;<i class="bi bi-x-lg myfloat fw-bold fs-2"></i></div> -->
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <button class="btn btn-warning btn-lg" style="min-width: 200px;" id="submit-btn">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <section class="toggle example-style-2" style="display: none;" id="video-container">
+        <video id="scanvideo" class="img-fluid"></video>
+        <button id="close" class="float btn"><i class="bi bi-x-lg myfloat"></i></button>
+        <button id="count" class="float2 btn"><i class="bi bi-person-fill myfloat2"></i><span id="scan_count">0</span></button>
+    </section>
+    <script>
+        const scripturl = 'https://script.google.com/macros/s/AKfycbz2SqR1f6GZ3OsRuCQY_XBoQeJFOqPI4lB0I-E-naDha91d78G7ITWo3fG2JCowE7eW/exec'
+        var stdData, namelist = {}
+        $(document).ready(() => {
+            $('input[type="date"]').change(function () {
+                closeDate(this);
+            });
+
+            const videoElem = document.getElementById('scanvideo')
+            $.LoadingOverlay('show')
+            $.when($.ajax(scripturl + '?opt=getclass'), $.ajax(scripturl + '?opt=getstudent'), $.ajax(scripturl + '?opt=getteacher')).done(function (classdata, studentdata, teacherdata) {
+                console.log("🚀 ~ teacherdata", teacherdata)
+                console.log("🚀 ~ classdata", classdata)
+                console.log("🚀 ~ studentdata", studentdata)
+                stdData = studentdata[0]
+                $.LoadingOverlay('hide')
+                $('#subject').html($('<option>', { value: "", selected: true, disabled: true }).text("เลือกวิชาที่สอน"))
+                $('#teacher_name').html($('<option>', { value: "", selected: true, disabled: true }).text("เลือกชื่อครู"))
+                teacherdata[0].forEach(t => {
+                    $('#teacher_name').append($('<option>', { value: t }).text(t))
+                })
+                Object.keys(classdata[0]).forEach(c => {
+                    let optgroup = $('<optgroup>', { label: c })
+                    classdata[0][c].forEach(s => {
+                        optgroup.append($('<option>', { value: s }).text(s))
+                    })
+                    $('#subject').append(optgroup)
+                })
+            })
+            var frame = 0
+            $('#start-scan').click(function () {
+                var qrScanner = new QrScanner(
+                    videoElem,
+                    result => {
+                        if (frame < 5) return frame++
+                        frame = 0
+                        qrScanner.stop()
+                        let std = stdData[result.data]
+                        if (!std) {
+                            return Swal.fire({
+                                icon: 'warning',
+                                title: 'ไม่พบข้อมูลนักเรียนรหัส: ' + result.data,
+                                // allowOutsideClick: false,
+                                showCancelButton: true,
+                                confirmButtonText: '<i class="bi bi-qr-code-scan fs-3"></i>&nbsp;SCAN อีกครั้ง',
+                                cancelButtonText: 'ปิด'
+                            }).then(res => {
+                                qrScanner.start()
+                            })
+                        } else {
+                            return Swal.fire({
+                                icon: 'success',
+                                title: std.nname,
+                                html: '<h2>' + result.data + '<br>' + std.fname + ' ' + std.lname + '</h2>',
+                                showCancelButton: true,
+                                showDenyButton: true,
+                                confirmButtonText: 'เพิ่มนักเรียน',
+                                cancelButtonText: 'ปิด'
+                            }).then(res => {
+                                if (res.isConfirmed) {
+                                    $('#scandiv').html('').parent().show(200)
+                                    std.id = result.data
+                                    namelist[result.data] = std
+                                    let keys = Object.keys(namelist)
+                                    Object.keys(namelist).forEach((n, i) => {
+                                        let div = $('<div>', { class: 'col-12 btn btn-primary d-flex align-items-center', 'data-id': namelist[n].id }).html(`${namelist[n].id} ${namelist[n].fname} ${namelist[n].lname}&nbsp;&nbsp;&nbsp;&nbsp;`)
+                                        let btn = $('<i>', { class: 'bi bi-x-lg myfloat fw-bold fs-2 ms-auto' })
+                                        $(div).append(btn)
+                                        $(btn).click(function () {
+                                            let key = $(this).parent().attr('data-id')
+                                            $(this).parent().remove()
+                                            delete namelist[key]
+                                            if (Object.keys(namelist).length <= 0) $('#scandiv').html('').parent().hide(200)
+                                            $('#std_count').text(`${Object.keys(namelist).length} คน`)
+                                            $('#scan_count').text(Object.keys(namelist).length)
+                                        })
+                                        $('#scandiv').append(div)
+                                    })
+                                    $('#std_count').text(`${keys.length} คน`)
+                                    $('#scan_count').text(keys.length)
+                                }
+                                qrScanner.start()
+                            })
+                        }
+                    },
+                    {
+                        highlightScanRegion: true,
+                        highlightCodeOutline: true,
+                    }
+                );
+                $('.toggle').toggle()
+                $('#close').click(function () {
+                    qrScanner.stop()
+                    qrScanner.destroy()
+                    $('div.toggle').show()
+                    $('section.toggle').hide()
+                })
+                qrScanner.start();
+            })
+        })
+
+        function closeDate(dateInput) {
+            $(dateInput).attr('type', 'text');
+            $(dateInput).attr('type', 'date');
+        }
+
+        $('#submit-btn').click(function () {
+            Swal.fire({
+                title: 'กำลังบันทึก...',
+                allowOutsideClick: false,
+            })
+            Swal.showLoading(Swal.getConfirmButton())
+            let obj = { namelist: JSON.stringify(namelist) }
+            let teacher_name = $('#teacher_name').val()
+            let subject = $('#subject').val()
+            let teach_date = $('#teach_date').val()
+            let teach_time = $('#teach_time').val()
+            let teach_duration = $('#teach_duration').val()
+            if (![teacher_name, teach_date, teach_time, teach_duration, subject].every(a => a != '')) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                    allowOutsideClick: false,
+                    confirmButtonText: 'ตกลง'
+                })
+            }
+            obj.opt = 'appendhour'
+            obj.teacher_name = teacher_name
+            obj.teach_date = teach_date
+            obj.teach_time = teach_time
+            obj.teach_duration = teach_duration
+            obj.subject = subject
+            console.log("🚀 ~ obj", obj)
+            $.ajax({
+                method: 'POST',
+                data: obj,
+                url: scripturl
+            }).done(function (res) {
+                console.log("🚀 ~ res", res)
+                Swal.fire({
+                    icon: 'success',
+                    title: 'บันทึกเรียบร้อย',
+                    confirmButtonText: 'ตกลง'
+                }).then(() => {
+                    $('input, select').each(function () {
+                        $(this).val('')
+                    })
+                    $('#std_count').html('')
+                    $('#scandiv').parent().hide(200)
+                    namelist = {}
+                })
+            }).fail(function (error) {
+                console.log("🚀 ~ error", error)
+            })
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.1/qr-scanner.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
