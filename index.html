@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     <title>Document</title>
     <style>
         body {
@@ -168,15 +169,20 @@
         <button id="close" class="float btn"><i class="bi bi-x-lg myfloat"></i></button>
         <button id="count" class="float2 btn"><i class="bi bi-person-fill myfloat2"></i><span id="scan_count">0</span></button>
     </section>
+    <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
+    <!-- <script>
+        // VConsole will be exported to `window.VConsole` by default.
+        var vConsole = new window.VConsole();
+    </script> -->
     <script>
         const scripturl = 'https://script.google.com/macros/s/AKfycbz2SqR1f6GZ3OsRuCQY_XBoQeJFOqPI4lB0I-E-naDha91d78G7ITWo3fG2JCowE7eW/exec'
         var stdData, namelist = {}
         $(document).ready(() => {
-            $('input[type="date"]').change(function () {
-                closeDate(this);
-            });
-
-            const videoElem = document.getElementById('scanvideo')
+            liff.init({ liffId: '1656793589-KdZMmVE1', withLoginOnExternalBrowser: true });
+            liff.ready.then(() => {
+                initForm()
+                // liff.sendMessages([{ type: 'text', text: 'ok' }])
+            })
             $.LoadingOverlay('show')
             $.when($.ajax(scripturl + '?opt=getclass'), $.ajax(scripturl + '?opt=getstudent'), $.ajax(scripturl + '?opt=getteacher')).done(function (classdata, studentdata, teacherdata) {
                 console.log("🚀 ~ teacherdata", teacherdata)
@@ -197,6 +203,15 @@
                     $('#subject').append(optgroup)
                 })
             })
+        })
+
+        function initForm() {
+            $('input[type="date"]').change(function () {
+                closeDate(this);
+            });
+
+            const videoElem = document.getElementById('scanvideo')
+
             var frame = 0
             $('#start-scan').click(function () {
                 var qrScanner = new QrScanner(
@@ -267,7 +282,7 @@
                 })
                 qrScanner.start();
             })
-        })
+        }
 
         function closeDate(dateInput) {
             $(dateInput).attr('type', 'text');
@@ -307,11 +322,26 @@
                 url: scripturl
             }).done(function (res) {
                 console.log("🚀 ~ res", res)
+                teach_date = teach_date.split('-')
+                let msg = `บันทึกการสอนของ ${obj.teacher_name}
+                    
+วันที่: ${teach_date[2] + '/' + teach_date[1] + '/' + teach_date[0]}
+เวลา: ${obj.teach_time}
+จำนวน  ${obj.teach_duration}  ชั่วโมง
+
+นักเรียนทั้งหมด  ${Object.keys(namelist).length}  คน`
+                Object.keys(namelist).forEach((key, i) => {
+                    let n = namelist[key]
+                    msg += '\n' + (i + 1) + ". " + n.nname + ' (' + n.prefix + n.fname + ' ' + n.lname + ')'
+                })
+
+                liff.sendMessages([{ type: 'text', text: msg }])
                 Swal.fire({
                     icon: 'success',
                     title: 'บันทึกเรียบร้อย',
                     confirmButtonText: 'ตกลง'
                 }).then(() => {
+
                     $('input, select').each(function () {
                         $(this).val('')
                     })
